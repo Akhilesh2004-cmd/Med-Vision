@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Diagnosis Results - MedVision AI{% endblock %}
+
+{% block content %}
+<div class="results-container">
+    <h1><i class="fas fa-microscope"></i> AI Diagnosis Results</h1>
+
+    <div class="results-grid">
+        <!-- Image Preview -->
+        <div class="results-image">
+            <img src="{{ url_for('static', filename=report.image_path if report else image.image_path) }}" alt="Medical Image">
+            <p class="image-type"><i class="fas fa-info-circle"></i> {{ report.image_type if report else image.image_type }}</p>
+        </div>
+
+        <!-- Diagnosis Report -->
+        <div class="results-report">
+            {% if report %}
+                <div class="report-section">
+                    <h2><i class="fas fa-stethoscope"></i> Diagnosis Result</h2>
+                    <div class="diagnosis-box">
+                        <p class="diagnosis-label">Detected Condition:</p>
+                        <p class="diagnosis-result">{{ report.diagnosis }}</p>
+                        <p class="confidence-label">Confidence Score:</p>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: {{ report.confidence }}%"></div>
+                        </div>
+                        <p class="confidence-score">{{ report.confidence }}%</p>
+                    </div>
+                </div>
+
+                <div class="report-section">
+                    <h3>Report Information</h3>
+                    <p><strong>Patient:</strong> {{ report.name }}</p>
+                    <p><strong>Email:</strong> {{ report.email }}</p>
+                    <p><strong>Date:</strong> {{ report.created_date }}</p>
+                </div>
+
+                <div class="report-actions">
+                    <a href="{{ url_for('export_pdf', report_id=report.report_id) }}" class="btn btn-primary">
+                        <i class="fas fa-file-pdf"></i> Export as PDF
+                    </a>
+                    <a href="{{ url_for('history') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to History
+                    </a>
+                </div>
+            {% else %}
+                <div class="report-section">
+                    <h2><i class="fas fa-spinner"></i> Processing Image...</h2>
+                    <p>Analyzing medical image with AI model. Please wait...</p>
+                    <button onclick="analyzeImage()" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Start Analysis
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+async function analyzeImage() {
+    try {
+        const imageId = {{ image.image_id if image else 'null' }};
+        const response = await fetch(`/analyze/${imageId}`, {
+            method: 'POST'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            window.location.href = `/results/${data.report_id}`;
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+</script>
+{% endblock %}

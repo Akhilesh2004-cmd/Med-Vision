@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - MedVision AI{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <h1><i class="fas fa-cogs"></i> Admin Dashboard</h1>
+
+    <!-- Statistics -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <h3>{{ stats.total_users }}</h3>
+            <p>Total Users</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-file-medical"></i>
+            <h3>{{ stats.total_diagnoses }}</h3>
+            <p>Total Diagnoses</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-image"></i>
+            <h3>{{ stats.total_images }}</h3>
+            <p>Total Images</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-chart-bar"></i>
+            <h3>{{ stats.avg_confidence }}%</h3>
+            <p>Average Confidence</p>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="admin-section">
+        <h2><i class="fas fa-users"></i> Registered Users</h2>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.user_id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td><span class="badge" style="background: {% if user.role == 'admin' %}#e74c3c{% else %}#3498db{% endif %};">{{ user.role.upper() }}</span></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- AI Models -->
+    <div class="admin-section">
+        <h2><i class="fas fa-robot"></i> AI Models</h2>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Model Name</th>
+                    <th>Version</th>
+                    <th>Accuracy</th>
+                    <th>Train Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for model in models %}
+                    <tr>
+                        <td>{{ model.model_name }}</td>
+                        <td>{{ model.version }}</td>
+                        <td>{{ model.accuracy }}%</td>
+                        <td>{{ model.train_date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

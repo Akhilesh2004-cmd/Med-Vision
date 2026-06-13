@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Diagnosis History - MedVision AI{% endblock %}
+
+{% block content %}
+<div class="history-container">
+    <h1><i class="fas fa-history"></i> Diagnosis History</h1>
+
+    {% if reports %}
+        <table class="reports-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Image Type</th>
+                    <th>Diagnosis</th>
+                    <th>Confidence</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                    <tr>
+                        <td>{{ report.created_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td><span class="badge">{{ report.image_type }}</span></td>
+                        <td>{{ report.diagnosis }}</td>
+                        <td>
+                            <div class="confidence-mini">
+                                <span class="confidence-value">{{ report.confidence }}%</span>
+                                <div class="confidence-bar-mini">
+                                    <div class="fill" style="width: {{ report.confidence }}%"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="/results/{{ report.report_id }}" class="btn-small">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-data">
+            <i class="fas fa-inbox"></i>
+            <p>No diagnosis history yet.</p>
+            <a href="{{ url_for('upload') }}" class="btn btn-primary">Upload Image</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

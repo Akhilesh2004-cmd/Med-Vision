@@ -1,0 +1,18 @@
+Patient ID: Demo Patient
+Scan Type: MRI Brain Scan (Axial View)
+Analysis Method: AI-based Image Analysis (MedVision AI)
+
+Findings:
+
+The brain structure appears symmetrical.
+
+No obvious abnormal mass or tumor detected.
+
+No visible signs of hemorrhage or lesion.
+
+Brain tissues appear normal in intensity and structure.
+
+No abnormal swelling observed.
+
+AI Diagnosis Result:
+No significant abnormality detected.
